@@ -1,0 +1,85 @@
+services:
+  orders-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ordersdb
+      POSTGRES_USER: ordersuser
+      POSTGRES_PASSWORD: orderspass
+    ports:
+      - "5435:5432"
+    volumes:
+      - orders-db-data:/var/lib/postgresql/data
+      - ./docker/init.orders.sql:/docker-entrypoint-initdb.d/init.sql
+
+  payments-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: paymentsdb
+      POSTGRES_USER: paymentsuser
+      POSTGRES_PASSWORD: paymentspass
+    ports:
+      - "5436:5432"
+    volumes:
+      - payments-db-data:/var/lib/postgresql/data
+      - ./docker/init.payments.sql:/docker-entrypoint-initdb.d/init.sql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  orders-service:
+    build: ./src/OrdersService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__OrdersDb: Host=orders-db;Port=5432;Database=ordersdb;Username=ordersuser;Password=orderspass
+      RabbitMQ__Host: rabbitmq
+    depends_on:
+      - orders-db
+      - rabbitmq
+    ports:
+      - "5000:5000"
+
+  payments-service:
+    build: ./src/PaymentsService
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5001
+      ConnectionStrings__PaymentsDb: Host=payments-db;Port=5432;Database=paymentsdb;Username=paymentsuser;Password=paymentspass
+      RabbitMQ__Host: rabbitmq
+    depends_on:
+      - payments-db
+      - rabbitmq
+    ports:
+      - "5001:5001"
+
+  api-gateway:
+    build: ./src/ApiGateway
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+    depends_on:
+      - orders-service
+      - payments-service
+    ports:
+      - "8080:8080"
+
+  frontend-app:
+    build: ./src/FrontendApp
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+
+volumes:
+  orders-db-data:
+  payments-db-data: 

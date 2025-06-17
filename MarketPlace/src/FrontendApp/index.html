@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система Онлайн-Покупок</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="notification-area"></div>
+    
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-shopping-cart"></i>
+                <h1>Система Онлайн-Покупок</h1>
+            </div>
+            <nav>
+                <button class="tab-btn active" data-tab="accounts">Счета</button>
+                <button class="tab-btn" data-tab="orders">Заказы</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="accounts-tab" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user-plus"></i>
+                        <h2>Создать счет</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="createAccountUserId">ID пользователя</label>
+                            <input type="text" id="createAccountUserId" placeholder="Введите ID пользователя">
+                        </div>
+                        <button class="btn primary" onclick="createAccount()">
+                            <i class="fas fa-plus-circle"></i> Создать
+                        </button>
+                        <div id="createAccountResult" class="result"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <h2>Пополнить баланс</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="depositUserId">ID пользователя</label>
+                            <input type="text" id="depositUserId" placeholder="Введите ID пользователя">
+                        </div>
+                        <div class="form-group">
+                            <label for="depositAmount">Сумма</label>
+                            <input type="number" id="depositAmount" placeholder="Введите сумму">
+                        </div>
+                        <button class="btn success" onclick="deposit()">
+                            <i class="fas fa-plus"></i> Пополнить
+                        </button>
+                        <div id="depositResult" class="result"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-wallet"></i>
+                        <h2>Проверить баланс</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="balanceUserId">ID пользователя</label>
+                            <input type="text" id="balanceUserId" placeholder="Введите ID пользователя">
+                        </div>
+                        <button class="btn info" onclick="getBalance()">
+                            <i class="fas fa-search-dollar"></i> Проверить
+                        </button>
+                        <div id="balanceResult" class="result"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="orders-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-cart-plus"></i>
+                        <h2>Создать заказ</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="createOrderUserId">ID пользователя</label>
+                            <input type="text" id="createOrderUserId" placeholder="Введите ID пользователя">
+                        </div>
+                        <div class="form-group">
+                            <label for="createOrderAmount">Сумма</label>
+                            <input type="number" id="createOrderAmount" placeholder="Введите сумму">
+                        </div>
+                        <div class="form-group">
+                            <label for="createOrderDescription">Описание</label>
+                            <input type="text" id="createOrderDescription" placeholder="Введите описание">
+                        </div>
+                        <button class="btn primary" onclick="createOrder()">
+                            <i class="fas fa-plus-circle"></i> Создать
+                        </button>
+                        <div id="createOrderResult" class="result"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list-ul"></i>
+                        <h2>Список заказов</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="getOrdersUserId">ID пользователя</label>
+                            <input type="text" id="getOrdersUserId" placeholder="Введите ID пользователя">
+                        </div>
+                        <button class="btn info" onclick="getOrders()">
+                            <i class="fas fa-search"></i> Найти
+                        </button>
+                        <div id="getOrdersResult" class="result code-block"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle"></i>
+                        <h2>Статус заказа</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="getOrderStatusId">ID заказа</label>
+                            <input type="text" id="getOrderStatusId" placeholder="Введите ID заказа">
+                        </div>
+                        <button class="btn info" onclick="getOrderStatus()">
+                            <i class="fas fa-search"></i> Проверить
+                        </button>
+                        <div id="getOrderStatusResult" class="result"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2023 Система Онлайн-Покупок. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
